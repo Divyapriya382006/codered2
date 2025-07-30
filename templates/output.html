@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Function Output</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+        }
+        .result-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .result-container th, .result-container td {
+            border: 1px solid #e2e8f0; /* Tailwind gray-200 */
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .dark .result-container th, .dark .result-container td {
+            border: 1px solid #4a5568; /* Tailwind gray-600 */
+        }
+        .result-container th {
+            background-color: #edf2f7; /* Tailwind gray-100 */
+            font-weight: bold;
+        }
+        .dark .result-container th {
+            background-color: #4a5568; /* Tailwind gray-700 */
+        }
+        .result-container tr:nth-child(even) {
+            background-color: #f7fafc; /* Tailwind gray-50 */
+        }
+        .dark .result-container tr:nth-child(even) {
+            background-color: #2d3748; /* Tailwind gray-800 */
+        }
+        .result-container img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin-top: 1.5rem;
+        }
+        .result-container pre {
+            white-space: pre-wrap; /* Ensures long lines wrap */
+            word-break: break-all; /* Breaks words if necessary */
+            overflow-x: auto;
+            max-height: 500px; /* Limit height for preformatted text */
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-6 md:p-10 flex flex-col">
+    <a href="/" class="text-blue-500 hover:underline inline-flex items-center mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        Back to Toolkit
+    </a>
+    <h2 class="text-3xl font-bold mt-4 mb-6">📤 Output for: {{ function.replace('_', ' ').title() }}</h2>
+
+    <div class="result-container overflow-x-auto bg-gray-100 dark:bg-gray-800 p-4 rounded shadow text-sm flex-grow">
+        {{ result | safe }}
+    </div>
+
+    {% if chart_type %}
+    <div class="mt-8 bg-gray-100 dark:bg-gray-800 p-4 rounded shadow">
+        <h3 class="text-xl font-bold mb-4">Chart for {{ function.replace('_', ' ').title() }}</h3>
+        <canvas id="myChart" class="w-full max-w-3xl mx-auto"></canvas>
+    </div>
+    {% endif %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dark mode toggle (re-applied here for consistency, though better in a shared JS)
+            const modeToggle = document.getElementById('modeToggle');
+            if (modeToggle) {
+                modeToggle.addEventListener('click', () => {
+                    document.documentElement.classList.toggle('dark');
+                });
+            }
+
+            const chartType = {{ chart_type | tojson }};
+            if (chartType) {
+                const labels = JSON.parse({{ chart_labels | tojson }});
+                const dataValues = JSON.parse({{ chart_data | tojson }});
+                const chartTitle = {{ chart_title | tojson }};
+
+                const data = {
+                    labels: labels,
+                    datasets: [{
+                        label: chartTitle,
+                        data: dataValues,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                };
+
+                const config = {
+                    type: chartType,
+                    data: data,
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: document.documentElement.classList.contains('dark') ? '#cbd5e0' : '#4a5568' // Adjust legend color for dark/light mode
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: document.documentElement.classList.contains('dark') ? '#cbd5e0' : '#4a5568'
+                                },
+                                grid: {
+                                    color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    color: document.documentElement.classList.contains('dark') ? '#cbd5e0' : '#4a5568'
+                                },
+                                grid: {
+                                    color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                                }
+                            }
+                        }
+                    }
+                };
+
+                new Chart(document.getElementById('myChart'), config);
+            }
+        });
+    </script>
+</body>
+</html>

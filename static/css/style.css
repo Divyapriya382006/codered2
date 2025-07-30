@@ -1,0 +1,57 @@
+/* Custom keyframes for animations (if needed beyond Tailwind's utility classes) */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.03);
+    }
+}
+
+.animate-pulse-custom {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+/* Add any other specific styles here that Tailwind doesn't easily cover */
+/* For example, for a fixed-size block */
+/* .function-block {
+    width: 400px;
+    height: 200px;
+} */
+
+/* Custom styles for the table preview */
+.data-preview-table th, .data-preview-table td {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0; /* Tailwind's gray-200 */
+}
+/* This will apply when the 'dark' class is on the <html> or <body> element */
+.dark .data-preview-table th, .dark .data-preview-table td {
+    border: 1px solid #4a5568; /* Tailwind's gray-600 */
+}
+
+/* REMOVE OR COMMENT OUT THESE SECTIONS IF YOU ARE PURELY USING TAILWIND'S DARK MODE */
+/* Light mode (default) - If you use Tailwind's dark: classes, these are redundant */
+/* :root {
+    --background-color: #ffffff;
+    --text-color: #333333;
+    --primary-color: #007bff;
+} */
+
+/* Dark mode styles - If you use Tailwind's dark: classes, these are redundant */
+/* .dark-mode {
+    --background-color: #1a1a1a;
+    --text-color: #f0f0f0;
+    --primary-color: #66b3ff;
+} */
+
+/* These body and button styles are covered by Tailwind classes already in your HTML */
+/* body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+} */

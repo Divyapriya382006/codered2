@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" class="dark"> <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Science Toolkit</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        /* Custom styles for the table preview */
+        .data-preview-table th, .data-preview-table td {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0; /* Tailwind's gray-200 */
+        }
+        /* Tailwind's 'dark' class handles this automatically if on html or body */
+        .dark .data-preview-table th, .dark .data-preview-table td {
+            border: 1px solid #4a5568; /* Tailwind's gray-600 */
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen flex flex-col">
+
+    <header class="bg-gray-100 dark:bg-gray-800 p-4 shadow-md flex flex-col sm:flex-row justify-between items-center animate-fade-in">
+        <div class="flex items-center space-x-2 mb-2 sm:mb-0">
+            <span class="text-3xl">🧠</span>
+            <h1 class="text-2xl font-bold">Data Science Toolkit</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <p class="text-sm text-gray-700 dark:text-gray-300">Upload data & perform 66+ powerful operations</p>
+            <button id="theme-toggle" class="p-2 rounded-full bg-gray-300 dark:bg-gray-600 text-lg focus:outline-none hover:opacity-80 transition-opacity">🌓</button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto py-10 px-4 w-full flex-grow animate-fade-in">
+        <div class="border-4 border-dashed p-10 text-center rounded-lg bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+            <label for="fileInput" class="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 inline-block">
+                Choose File (CSV, Excel, TXT)
+            </label>
+            <input id="fileInput" type="file" accept=".csv,.xlsx,.xls,.txt" class="hidden" onchange="displayFileName()" />
+            <p id="fileNameDisplay" class="mt-4 text-gray-700 dark:text-gray-300"></p>
+            <button onclick="uploadFile()" class="mt-6 bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" id="uploadButton" disabled>
+                Upload Data
+            </button>
+            <div id="uploadStatus" class="mt-4 text-sm font-semibold"></div>
+        </div>
+
+        <div id="dataPreview" class="mt-8 hidden">
+            <h2 class="text-2xl font-bold mb-4">Data Preview (First 5 Rows)</h2>
+            <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-inner overflow-x-auto">
+                <table class="w-full data-preview-table text-gray-800 dark:text-gray-200">
+                    <thead class="bg-gray-200 dark:bg-gray-700">
+                        <tr id="previewHeader"></tr>
+                    </thead>
+                    <tbody id="previewBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="functionGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+        </div>
+    </main>
+
+    <script>
+        // Pass functions data from Flask to JS
+        const functionsList = {{ functions | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
