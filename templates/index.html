@@ -66,9 +66,8 @@
     </main>
 
     <script>
-        // Pass functions data from Flask to JS
-        const functionsList = {{ functions | tojson }};
-    </script>
+  const functionsList = {{ functions | tojson | safe }};
+</script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
